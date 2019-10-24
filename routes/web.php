@@ -1,5 +1,6 @@
 <?php
 
+// 首页相关路由
 Route::get('/', 'PagesController@root')->name('root');
 
 // 用户身份验证相关的路由
@@ -21,3 +22,9 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset')->name('passw
 Route::get('email/verify', 'Auth\VerificationController@show')->name('verification.notice');
 Route::get('email/verify/{id}/{hash}', 'Auth\VerificationController@verify')->name('verification.verify');
 Route::post('email/resend', 'Auth\VerificationController@resend')->name('verification.resend');
+
+// 个人中心相关路由
+Route::resource('users', 'UsersController', ['only' => ['show', 'update', 'edit']]);
+//Route::get('/users/{user}', 'UsersController@show')->name('users.show');
+//Route::get('/users/{user}/edit', 'UsersController@edit')->name('users.edit');
+//Route::patch('/users/{user}', 'UsersController@update')->name('users.update');
