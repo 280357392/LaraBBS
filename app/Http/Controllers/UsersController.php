@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Handlers\ImageUploadHandler;
 use App\Http\Requests\UserRequest;
 use App\Models\User;
 
@@ -20,8 +21,15 @@ class UsersController extends Controller
 
     //使用了表单请求验证
     //只有当验证通过时，才会执行 控制器 update()
-    public function update(UserRequest $request,User $user){
-        $user->update($request->all());
+    public function update(UserRequest $request,ImageUploadHandler $uploader,User $user){
+        $data = $request->all();
+        if ($request->avatar){
+            $result = $uploader->save($request->avatar, 'avatars', $user->id);
+            if ($result) {
+                $data['avatar'] = $result['path'];
+            }
+        }
+        $user->update($data);
         return redirect()->route('users.show', $user->id)->with('success', '个人资料更新成功！');
     }
 }
