@@ -11,6 +11,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
 {
     use Notifiable, MustVerifyEmailTrait;
 
+    //只有在此属性里定义的字段，才允许修改，否则更新时会被忽略
     protected $fillable = [
         'name', 'email', 'password','introduction',
     ];
