@@ -16,8 +16,13 @@ class TopicsController extends Controller
 
 	public function index()
 	{
-		$topics = Topic::paginate();
-		return view('topics.index', compact('topics'));
+		//$topics = Topic::paginate(30);
+        //解决 N + 1 问题
+        //我们可以通过 Eloquent 提供的 预加载功能 来解决此问题
+        //方法 with() 提前加载了我们后面需要用到的关联属性 user 和 category，并做了缓存
+        $topics = Topic::with('user', 'category')->paginate(30);
+
+        return view('topics.index', compact('topics'));
 	}
 
     public function show(Topic $topic)
