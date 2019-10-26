@@ -4,7 +4,6 @@
 @import 'variables';
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
-
 // Font Awesome 字体图标
 @import '~@fortawesome/fontawesome-free/scss/fontawesome';
 @import '~@fortawesome/fontawesome-free/scss/regular';
@@ -27,7 +26,6 @@ body {
   margin-bottom: 40px;
   margin-top: 0px;
 }
-
 
 /* 页脚固定 */
 
@@ -77,9 +75,9 @@ body {
 }
 
 /* Topic Index Page */
-.topics-index-page {
+.topics-index-page, .categories-show-page {
   .topic-list {
-    .nav>li>a {
+    .nav > li > a {
       position: relative;
       display: block;
       padding: 5px 14px;
