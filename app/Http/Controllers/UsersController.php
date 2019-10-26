@@ -25,7 +25,8 @@ class UsersController extends Controller
         $data = $request->all();
         if ($request->avatar){
             //移动该文件到avatars目录并返回文件访问路径
-            $result = $uploader->save($request->avatar, 'avatars', $user->id);
+            //最大宽限制在416以内，大于416的裁剪成  宽度为416  高度按比例缩放
+            $result = $uploader->save($request->avatar, 'avatars', $user->id,416);
             //文件名错误返回false
             if ($result) {
                 $data['avatar'] = $result['path'];//http://larabbs.test/uploads/images/avatars/201910/25/6_1571998312_9QQmJQQbCS.jpg

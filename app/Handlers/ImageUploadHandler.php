@@ -3,6 +3,7 @@
 namespace App\Handlers;
 
 use  Illuminate\Support\Str;
+use Intervention\Image\Facades\Image;
 
 //工具类（utility class）是指一些跟业务逻辑相关性不强的类，图片上传相关的逻辑
 class ImageUploadHandler
@@ -16,7 +17,7 @@ class ImageUploadHandler
      * @param $file_prefix 自定义文件前缀名
      * @return array|bool 图片访问的链接\false(后缀名不合法)
      */
-    public function save($file, $folder, $file_prefix)
+    public function save($file, $folder, $file_prefix,$max_width = false)
     {
 
         //存储目录
@@ -54,10 +55,37 @@ class ImageUploadHandler
         $file->move($upload_path, $filename);
 
 
+        // 如果传参了表示要限制图片宽度，就进行裁剪
+        if ($max_width && $extension != 'gif') {
+
+            // 此类中封装的函数，用于裁剪图片， public+ 文件目录 + 文件名   最大宽度
+            $this->reduceSize($upload_path . '/' . $filename, $max_width);
+        }
+
+
         return [
             // 'url' => env('APP_URL', 'http://localhost'),
             //http://larabbs.test    /uploads/images/avatars/201910/25      /6_1571998312_9QQmJQQbCS.jpg
             'path' => config('app.url') . "/$folder_name/$filename"
         ];
+    }
+
+    public function reduceSize($file_path, $max_width)
+    {
+        // 先实例化，传参是文件的磁盘物理路径
+        $image = Image::make($file_path);
+
+        // 进行大小调整的操作
+        $image->resize($max_width, null, function ($constraint) {
+
+            // 设定宽度是 $max_width，高度等比例缩放
+            $constraint->aspectRatio();
+
+            // 防止裁图时图片尺寸变大
+            $constraint->upsize();
+        });
+
+        // 对图片修改后进行保存
+        $image->save();
     }
 }
