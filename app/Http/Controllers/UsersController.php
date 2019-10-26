@@ -8,6 +8,11 @@ use App\Models\User;
 
 class UsersController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('auth', ['except' => ['show']]);
+    }
+
     //如果数据库中找不到对应的模型实例，会自动生成 HTTP 404 响应
     public function show(User $user)
     {
@@ -16,12 +21,14 @@ class UsersController extends Controller
     }
 
     public function edit(User $user){
+        $this->authorize('update', $user);
         return view('users.edit', compact('user'));
     }
 
     //使用了表单请求验证
     //只有当验证通过时，才会执行 控制器 update()
     public function update(UserRequest $request,ImageUploadHandler $uploader,User $user){
+        $this->authorize('update', $user);
         $data = $request->all();
         if ($request->avatar){
             //移动该文件到avatars目录并返回文件访问路径
