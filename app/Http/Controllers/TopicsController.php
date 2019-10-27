@@ -14,13 +14,17 @@ class TopicsController extends Controller
         $this->middleware('auth', ['except' => ['index', 'show']]);
     }
 
-	public function index()
+	public function index(Request $request,Topic $topic)
 	{
 		//$topics = Topic::paginate(30);
         //解决 N + 1 问题
         //我们可以通过 Eloquent 提供的 预加载功能 来解决此问题
         //方法 with() 提前加载了我们后面需要用到的关联属性 user 和 category，并做了缓存
-        $topics = Topic::with('user', 'category')->paginate(30);
+        //$topics = Topic::with('user', 'category')->paginate(30);
+
+        $topics = $topic->withOrder($request->order)
+            ->with('user', 'category')  // 预加载防止 N+1 问题
+            ->paginate(20);
 
         return view('topics.index', compact('topics'));
 	}
