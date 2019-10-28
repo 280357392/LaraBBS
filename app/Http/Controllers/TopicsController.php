@@ -100,6 +100,7 @@ class TopicsController extends Controller
                 $data['success'] = true;
                 $data['msg'] = "上传成功!";
                 $data['file_path'] = $result['path'];
+                //http://larabbs.test/uploads/images/topics/201910/28/1_1572257054_yfR6n85di3.png
             }
         }
         return $data;
