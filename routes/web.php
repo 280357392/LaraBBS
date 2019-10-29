@@ -39,3 +39,6 @@ Route::resource('categories', 'CategoriesController', ['only' => ['show']]);
 
 //处理上传图片相关路由
 Route::post('upload_image', 'TopicsController@uploadImage')->name('topics.upload_image');
+
+//回复相关路由
+Route::resource('replies', 'RepliesController', ['only' => ['index', 'show', 'create', 'store', 'update', 'edit', 'destroy']]);
